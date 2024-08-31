@@ -1,8 +1,6 @@
 import requests
 
 class NightCrowToken:
-    def __init__(self) -> None:
-        pass
     
     def get_tokens_info(self):
         url = 'https://www.nightcrows.com/nftapi/v1/main/token/ncgl'
