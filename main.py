@@ -22,16 +22,15 @@ class Token:
 
     def __init__(self) -> None:
         self.night_crow_tokens = self.night_crow_parser.parse_token_info()
+        self._token_fee = self.get_data_from_json('token_fee.json')
+        self._resources_avg_price = self.get_data_from_json('item_avg_price.json')
 
-        with open('token_fee.json') as file:
-            self._token_fee = json.load(file)
-        with open('item_avg_price.json') as file:
-            self._resources_avg_price = json.load(file)
-
-
+    def get_data_from_json(self, path):
+        with open(path) as file:
+            return json.load(file)
 
     def calculate_token_price(self):
-        result = []
+        tokens_data = []
         usd_token_price = self.night_crow_tokens['CROW']['close']
 
 
@@ -44,7 +43,7 @@ class Token:
             if token_name != 'CROW':
                 last_crow_price = token_data['close']
 
-            result.append(
+            tokens_data.append(
                 {
                     'token_name': token_name,
                     'dimond_price_per_token': self.__token_resource_amount[token_name] * self._resources_avg_price[token_name] + self._token_fee[token_name],
@@ -53,8 +52,13 @@ class Token:
                 }
             )
 
-        print(tabulate(result, headers='keys', tablefmt='psql'))
-token = Token()
-token.calculate_token_price()
+        return tokens_data
 
+
+    def table_output(self, token_data: list):
+        print(tabulate(token_data, headers='keys', tablefmt='psql'))
+
+token = Token()
+token_data = token.calculate_token_price()
+token.table_output(token_data)
 

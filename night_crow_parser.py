@@ -9,7 +9,6 @@ class NightCrowToken:
     def parse_token_info(self) -> list:
         tokens_data_result = {}
         tokens_data = self.get_tokens_info().get('data', {})
-
         tokens_data_result['CROW'] = tokens_data['CROW']
 
         for token in tokens_data['list']:
